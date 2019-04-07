@@ -7,6 +7,8 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.ModelAndViewDefiningException;
 
 /**
  * @author Yorke
@@ -29,6 +31,12 @@ public class ShiroSampleController {
     public void logout() {
         Subject currentUser = SecurityUtils.getSubject();
         currentUser.logout();
+    }
+
+    @GetMapping("/")
+    public ModelAndView index() {
+        ModelAndView mv = new ModelAndView(  "/index");
+        return mv;
     }
 
     @GetMapping("/read")

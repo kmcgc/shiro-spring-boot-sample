@@ -5,10 +5,15 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.ModelAndViewDefiningException;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Yorke
@@ -19,7 +24,7 @@ public class ShiroSampleController {
     @Autowired
     private ShiroSampleService shiroSampleService;
 
-    @GetMapping("/login")
+//    @GetMapping("/login")
     public void login(String username, String password) {
         UsernamePasswordToken token = new UsernamePasswordToken(username, password);
         token.setRememberMe(true);
@@ -33,10 +38,13 @@ public class ShiroSampleController {
         currentUser.logout();
     }
 
-    @GetMapping("/")
-    public ModelAndView index() {
-        ModelAndView mv = new ModelAndView(  "/index");
-        return mv;
+    @PostMapping("/login")
+    @ResponseBody
+    public String index(HttpServletRequest request) {
+        String username=request.getParameter("username");
+        String password=request.getParameter("password");
+       login(username,password);
+       return "ok";
     }
 
     @GetMapping("/read")
